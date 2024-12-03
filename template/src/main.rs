@@ -6,4 +6,7 @@ use std::{
 
 fn main() {
 	let file = BufReader::new(File::open("input").unwrap());
+	file.lines().map(|x| {
+		let x = x.unwrap();
+	})
 }
