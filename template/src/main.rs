@@ -3,6 +3,7 @@ use std::{
 	fs::File,
 	io::{BufRead, BufReader},
 	mem::{transmute_copy, ManuallyDrop, MaybeUninit},
+	thread::scope,
 };
 
 fn main() {
@@ -13,6 +14,10 @@ fn main() {
 			let x = x.unwrap();
 		})
 		.collect();
+}
+
+fn tryy<'a, T: Send + 'a>(q: impl FnOnce() -> T + Send + 'a) -> Option<T> {
+	scope(|s| s.spawn(q).join().ok())
 }
 
 struct CProduct<'a, T, const SIZE: usize, const OUT_SIZE: usize> {
