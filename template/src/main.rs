@@ -16,6 +16,64 @@ fn main() {
 		.collect();
 }
 
+trait IffExt {
+	fn iff(self, cnd: impl FnOnce(&Self) -> bool) -> Option<Self>
+	where
+		Self: Sized;
+}
+
+impl<T> IffExt for T {
+	fn iff(self, cnd: impl FnOnce(&Self) -> bool) -> Option<Self> {
+		if cnd(&self) {
+			Some(self)
+		} else {
+			None
+		}
+	}
+}
+
+trait GetIExt {
+	type Out;
+	fn geti(&self, idx: i32) -> Option<&Self::Out>;
+	fn geti_mut(&mut self, idx: i32) -> Option<&mut Self::Out>;
+}
+
+impl<T> GetIExt for [T] {
+	type Out = T;
+	fn geti(&self, idx: i32) -> Option<&T> {
+		if idx < 0 {
+			return None;
+		}
+
+		self.get(idx as usize)
+	}
+
+	fn geti_mut(&mut self, idx: i32) -> Option<&mut T> {
+		if idx < 0 {
+			return None;
+		}
+
+		self.get_mut(idx as usize)
+	}
+}
+
+trait AndMutExt<T> {
+	fn and_mut<F>(self, f: F)
+	where
+		F: FnOnce(&mut T);
+}
+
+impl<T> AndMutExt<T> for Option<&mut T> {
+	fn and_mut<F>(self, f: F)
+	where
+		F: FnOnce(&mut T),
+	{
+		if let Some(x) = self {
+			f(x)
+		}
+	}
+}
+
 fn tryy<'a, T: Send + 'a>(q: impl FnOnce() -> T + Send + 'a) -> Option<T> {
 	scope(|s| s.spawn(q).join().ok())
 }
