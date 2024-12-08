@@ -1,0 +1,8 @@
+[package]
+name = "utils"
+authors = ["Fili_pk"]
+license = "MIT"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
