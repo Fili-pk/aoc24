@@ -1,0 +1,11 @@
+[package]
+name = "aoc"
+version = "0.1.0"
+edition = "2021"
+authors = ["Fili_pk"]
+
+[dependencies]
+itertools = "0.13.0"
+regex = "1.11.1"
+utils = { path = "../utils" }
+rayon = "1.8"
